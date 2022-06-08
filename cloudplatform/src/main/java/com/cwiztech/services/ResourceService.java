@@ -1,12 +1,8 @@
 package com.cwiztech.services;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -21,12 +17,12 @@ import com.cwiztech.token.AccessToken;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 @Component
-public class PersonService {
+public class ResourceService {
 	private static final Logger log = LoggerFactory.getLogger(AccessToken.class);
-	private static String personService;
+	private static String resourceService;
 
-	public PersonService(Environment env) {
-		PersonService.personService = env.getRequiredProperty("file_path.PERSONSERVICE");
+	public ResourceService(Environment env) {
+		ResourceService.resourceService = env.getRequiredProperty("file_path.RESOURCESERVICE");
 	}
 
 	public static String GET(String URI, String accessToken)
@@ -34,8 +30,8 @@ public class PersonService {
 		String rtnAPIResponse="Invalid Resonse";
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = AccessToken.getHttpHeader(accessToken);
-		String appPath = AccessToken.findApplicationDetail(personService, headers);
-
+		//String appPath = AccessToken.findApplicationDetail(resourceService, headers);
+		String appPath = "http://localhost:8080/";
 		log.info("GET: " + appPath + URI);
 
 		HttpEntity<String> entity = new HttpEntity<String>(headers);
@@ -52,8 +48,8 @@ public class PersonService {
 		String rtnAPIResponse="Invalid Resonse";
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = AccessToken.getHttpHeader(accessToken);
-		String appPath = AccessToken.findApplicationDetail(personService, headers);
-
+		//String appPath = AccessToken.findApplicationDetail(resourceService, headers);
+		String appPath = "http://localhost:8080/";
 		log.info("POST: " + appPath + URI);
 		log.info("Body: " + body);
 
@@ -71,7 +67,7 @@ public class PersonService {
 		String rtnAPIResponse="Invalid Resonse";
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = AccessToken.getHttpHeader(accessToken);
-		String appPath = AccessToken.findApplicationDetail(personService, headers);
+		String appPath = AccessToken.findApplicationDetail(resourceService, headers);
 
 		log.info("PUT: " + appPath + URI);
 		log.info("Body: " + body);
@@ -90,7 +86,7 @@ public class PersonService {
 		String rtnAPIResponse="Invalid Resonse";
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = AccessToken.getHttpHeader(accessToken);
-		String appPath = AccessToken.findApplicationDetail(personService, headers);
+		String appPath = AccessToken.findApplicationDetail(resourceService, headers);
 
 		log.info("DELETE: " + appPath + URI);
 
@@ -103,31 +99,3 @@ public class PersonService {
 		return rtnAPIResponse;
 	}
 }
-
-//if(calling.getPERSON_ID() != null) {
-	//JSONObject person = new JSONObject(PersonService.GET("person/"+calling.getPERSON_ID(), apiRequest.getREQUEST_OUTPUT()));
-	//calling.setPERSON_DETAIL(person.toString());
-//}
-
-
-
-
-
-//if (callings.size()>0) {
-//	List<Integer> personList = new ArrayList<Integer>();
-//	for (int i=0; i<callings.size(); i++) {
-//		personList.add(Integer.parseInt(callings.get(i).getPERSON_ID().toString()));
-//	}
-//	JSONArray personObject = new JSONArray(PersonService.POST("person/ids", "{persons: "+personList+"}", apiRequest.getREQUEST_OUTPUT()));
-	
-//	for (int i=0; i<callings.size(); i++) {
-//		for (int j=0; j<personObject.length(); j++) {
-//			JSONObject person = personObject.getJSONObject(j);
-//			if(callings.get(i).getPERSON_ID() == person.getLong("person_ID") ) {
-//				callings.get(i).setPERSON_DETAIL(person.toString());
-//			}
-//		}
-//	}
-//}
-
-

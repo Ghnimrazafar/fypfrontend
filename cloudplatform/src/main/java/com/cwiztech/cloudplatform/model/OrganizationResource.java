@@ -1,10 +1,13 @@
 package com.cwiztech.cloudplatform.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
  @Table(name="TBLORGANIZATIONRESOURCE")
@@ -12,57 +15,100 @@ import javax.persistence.Table;
 public class OrganizationResource {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int ORGANIZATIONRESOURCE_ID;
-	private int ORGANIZATION_ID  ;
-	private int RESOURCETYPE_ID ;
-	private  long ORGANIZATIONRESOURCE_DESCRIPTION;
-	private int MAXIMUM_NODES ; 
+	
+	private Long ORGANIZATIONRESOURCE_ID;
+	@Column(name = "ORGANIZATION_ID")
+	private Long ORGANIZATION_ID  ;
+	
+	@Column(name = "RESOURCETYPE_ID")
+	private Long RESOURCETYPE_ID ;
+	
+	@Column(name = "ORGANIZATIONRESOURCE_DESCRIPTION")
+	private  String ORGANIZATIONRESOURCE_DESCRIPTION;
+	
+	@Column(name = "MAXIMUM_NODES")
+	private Long MAXIMUM_NODES ; 
+	
+	@Column(name = "WEBSITE")
 	private String WEBSITE ; 
-	private int VISIBILITY_ID ; 
-	private  int RESOURCEBEHAVIOURTYPE_ID ;
-	private  char USEGLOBALSECURITYGROUP ; 
-	private  char CHECKRUNWAYINSTANCES ;
+	
+	@Column(name = "VISIBILITY_ID")
+	private Long VISIBILITY_ID ; 
+	
+	@Column(name = "RESOURCEBEHAVIOURTYPE_ID ")
+	private  Long RESOURCEBEHAVIOURTYPE_ID ;
+	
+	@Column(name = "USEGLOBALSECURITYGROUP")
+	private  String USEGLOBALSECURITYGROUP ; 
+	
+	@Column(name = "CHECKRUNWAYINSTANCES")
+	private  String CHECKRUNWAYINSTANCES ;
+	
+	@Column(name = "ACCESSINTERNET")
 	private char ACCESSINTERNET ; 
-	private char USEPROXY ;
+	
+	@Column(name = "USEPROXY")
+	private String USEPROXY ;
+	
+	@Column(name = "PROXY_HOSTNAME")
 	private String PROXY_HOSTNAME ;
+	
+	@Column(name = "PROXY_USERNAME")
 	private String  PROXY_USERNAME  ;
+	
+	@Column(name = "PROXY_PASSWORD")
 	private  String PROXY_PASSWORD ;
+	
+	@Column(name = "PROXY_PRIVATEKEY")
 	private String PROXY_PRIVATEKEY ;
+	
+	@Column(name = "PROXY_PUBLICEKEY")
 	private String PROXY_PUBLICEKEY ;
-	private char ISACTIVE ;
-	private int MODIFIED_BY ;
+	
+	@Column(name = "ISACTIVE")
+	private String ISACTIVE ;
+	
+	@JsonIgnore
+	@Column(name = " MODIFIED_BY")
+	private Long MODIFIED_BY ;
+	
+	@JsonIgnore
+	@Column(name = " MODIFIED_WHEN ")
 	private String MODIFIED_WHEN  ;
+	
+	@JsonIgnore
+	@Column(name = "MODIFIED_WORKSTATION")
 	private String MODIFIED_WORKSTATION  ;
 
 	
-	public int getORGANIZATIONRESOURCE_ID() {
+	public Long getORGANIZATIONRESOURCE_ID() {
 		return ORGANIZATIONRESOURCE_ID;
 	}
-	public void setORGANIZATIONRESOURCE_ID(int oRGANIZATIONRESOURCE_ID) {
+	public void setORGANIZATIONRESOURCE_ID(Long oRGANIZATIONRESOURCE_ID) {
 		ORGANIZATIONRESOURCE_ID = oRGANIZATIONRESOURCE_ID;
 	}
-	public int getORGANIZATION_ID() {
+	public Long getORGANIZATION_ID() {
 		return ORGANIZATION_ID;
 	}
-	public void setORGANIZATION_ID(int oRGANIZATION_ID) {
+	public void setORGANIZATION_ID(Long oRGANIZATION_ID) {
 		ORGANIZATION_ID = oRGANIZATION_ID;
 	}
-	public int getRESOURCETYPE_ID() {
+	public Long getRESOURCETYPE_ID() {
 		return RESOURCETYPE_ID;
 	}
-	public void setRESOURCETYPE_ID(int rESOURCETYPE_ID) {
+	public void setRESOURCETYPE_ID(Long rESOURCETYPE_ID) {
 		RESOURCETYPE_ID = rESOURCETYPE_ID;
 	}
-	public long getORGANIZATIONRESOURCE_DESCRIPTION() {
+	public String  getORGANIZATIONRESOURCE_DESCRIPTION() {
 		return ORGANIZATIONRESOURCE_DESCRIPTION;
 	}
-	public void setORGANIZATIONRESOURCE_DESCRIPTION(long oRGANIZATIONRESOURCE_DESCRIPTION) {
+	public void setORGANIZATIONRESOURCE_DESCRIPTION(String  oRGANIZATIONRESOURCE_DESCRIPTION) {
 		ORGANIZATIONRESOURCE_DESCRIPTION = oRGANIZATIONRESOURCE_DESCRIPTION;
 	}
-	public int getMAXIMUM_NODES() {
+	public Long getMAXIMUM_NODES() {
 		return MAXIMUM_NODES;
 	}
-	public void setMAXIMUM_NODES(int mAXIMUM_NODES) {
+	public void setMAXIMUM_NODES(Long mAXIMUM_NODES) {
 		MAXIMUM_NODES = mAXIMUM_NODES;
 	}
 	public String getWEBSITE() {
@@ -71,41 +117,41 @@ public class OrganizationResource {
 	public void setWEBSITE(String wEBSITE) {
 		WEBSITE = wEBSITE;
 	}
-	public int getVISIBILITY_ID() {
+	public Long getVISIBILITY_ID() {
 		return VISIBILITY_ID;
 	}
-	public void setVISIBILITY_ID(int vISIBILITY_ID) {
+	public void setVISIBILITY_ID(Long vISIBILITY_ID) {
 		VISIBILITY_ID = vISIBILITY_ID;
 	}
-	public int getRESOURCEBEHAVIOURTYPE_ID() {
+	public Long getRESOURCEBEHAVIOURTYPE_ID() {
 		return RESOURCEBEHAVIOURTYPE_ID;
 	}
-	public void setRESOURCEBEHAVIOURTYPE_ID(int rESOURCEBEHAVIOURTYPE_ID) {
+	public void setRESOURCEBEHAVIOURTYPE_ID(Long rESOURCEBEHAVIOURTYPE_ID) {
 		RESOURCEBEHAVIOURTYPE_ID = rESOURCEBEHAVIOURTYPE_ID;
 	}
-	public char getUSEGLOBALSECURITYGROUP() {
+	public String getUSEGLOBALSECURITYGROUP() {
 		return USEGLOBALSECURITYGROUP;
 	}
-	public void setUSEGLOBALSECURITYGROUP(char uSEGLOBALSECURITYGROUP) {
-		USEGLOBALSECURITYGROUP = uSEGLOBALSECURITYGROUP;
+	public void setUSEGLOBALSECURITYGROUP(String string) {
+		USEGLOBALSECURITYGROUP = string;
 	}
-	public char getCHECKRUNWAYINSTANCES() {
+	public String getCHECKRUNWAYINSTANCES() {
 		return CHECKRUNWAYINSTANCES;
 	}
-	public void setCHECKRUNWAYINSTANCES(char cHECKRUNWAYINSTANCES) {
-		CHECKRUNWAYINSTANCES = cHECKRUNWAYINSTANCES;
+	public void setCHECKRUNWAYINSTANCES(String string) {
+		CHECKRUNWAYINSTANCES = string;
 	}
 	public char getACCESSINTERNET() {
 		return ACCESSINTERNET;
 	}
-	public void setACCESSINTERNET(char aCCESSINTERNET) {
-		ACCESSINTERNET = aCCESSINTERNET;
+	public void setACCESSINTERNET(String string) {
+		string = string;
 	}
-	public char getUSEPROXY() {
+	public String getUSEPROXY() {
 		return USEPROXY;
 	}
-	public void setUSEPROXY(char uSEPROXY) {
-		USEPROXY = uSEPROXY;
+	public void setUSEPROXY(String string) {
+		USEPROXY = string;
 	}
 	public String getPROXY_HOSTNAME() {
 		return PROXY_HOSTNAME;
@@ -131,17 +177,20 @@ public class OrganizationResource {
 	public void setPROXY_PRIVATEKEY(String pROXY_PRIVATEKEY) {
 		PROXY_PRIVATEKEY = pROXY_PRIVATEKEY;
 	}
-	
-	public char getISACTIVE() {
+
+	public String getISACTIVE() {
 		return ISACTIVE;
 	}
-	public void setISACTIVE(char iSACTIVE) {
+
+	public void setISACTIVE(String iSACTIVE) {
 		ISACTIVE = iSACTIVE;
 	}
-	public int getMODIFIED_BY() {
+    @JsonIgnore
+	public Long getMODIFIED_BY() {
 		return MODIFIED_BY;
 	}
-	public void setMODIFIED_BY(int mODIFIED_BY) {
+
+	public void setMODIFIED_BY(Long mODIFIED_BY) {
 		MODIFIED_BY = mODIFIED_BY;
 	}
 	public String getMODIFIED_WORKSTATION() {
@@ -162,6 +211,12 @@ public class OrganizationResource {
 	public void setMODIFIED_WHEN(String mODIFIED_WHEN) {
 		MODIFIED_WHEN = mODIFIED_WHEN;
 	}
+
+	public static long getDatabaseTableID() {
+		return (long) 1;
+	}
+
+	}
 	
 
-}
+

@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.cwiztech.cloudplatform.model.OrganizationResource;
+import com.cwiztech.cloudplatform.repository.*;
 import com.cwiztech.datalogs.model.APIRequestDataLog;
 import com.cwiztech.datalogs.model.DatabaseTables;
 import com.cwiztech.datalogs.model.tableDataLogs;
@@ -28,7 +29,6 @@ import com.cwiztech.datalogs.repository.apiRequestDataLogRepository;
 import com.cwiztech.datalogs.repository.databaseTablesRepository;
 import com.cwiztech.datalogs.repository.tableDataLogRepository;
 import com.cwiztech.cloudplatform.model.*;
-import com.cwiztech.organizationresource.repository.*;
 import com.cwiztech.token.AccessToken;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -52,31 +52,14 @@ public class organizationresourceController{
 	@Autowired
 	private databaseTablesRepository databasetablesrepository;
 		
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping(method = RequestMethod.GET)
-	public String get(@RequestHeader(value = "Authorization") String headToken) throws JsonProcessingException {
-		ObjectMapper mapper = new ObjectMapper();
-		log.info("GET: /organizationresource");
+	public ResponseEntity get(@RequestHeader(value = "Authorization") String headToken) throws JsonProcessingException, JSONException, ParseException  {
+		APIRequestDataLog apiRequest = checkToken("GET", "/organizationresource/all", null, null, headToken);
+		if (apiRequest.getREQUEST_STATUS() != null) return new ResponseEntity(apiRequest.getREQUEST_OUTPUT(), HttpStatus.BAD_REQUEST);
 
-		List<OrganizationResource> organizationresource = organizationresourcerepository.findActive();
-		String rtn, workstation = null;
-		
-		Long requestUser;
-		requestUser = (long) 0;
-
-		DatabaseTables databaseTableID = databasetablesrepository.findOne(organizationresource.getDatabaseTableID());
-		APIRequestDataLog apiRequest = tableDataLogs.apiRequestDataLog("GET", databaseTableID, requestUser, "/organizationresource", null,
-				workstation);
-
-		rtn = mapper.writeValueAsString(organizationresource);
-
-		apiRequest.setREQUEST_OUTPUT(rtn);
-		apiRequest.setREQUEST_STATUS("Success");
-		apirequestdatalogRepository.saveAndFlush(apiRequest);
-
-		log.info("Output: " + rtn);
-		log.info("--------------------------------------------------------");
-
-		return rtn;
+		List<OrganizationResource> organizationresource = organizationresourcerepository.findActive();		
+		return new ResponseEntity(getAPIResponse(organizationresource, null, null, apiRequest, false).getREQUEST_OUTPUT(), HttpStatus.OK);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -182,43 +165,84 @@ public class organizationresourceController{
 			}
 
 			if (id == 0) {
-				if (!jsonObj.has("entityname") || jsonObj.isNull("entityname"))
-					return new ResponseEntity(getAPIResponse(null, null, "Entityname is missing", apiRequest, false).getREQUEST_OUTPUT(), HttpStatus.BAD_REQUEST);
+				if (!jsonObj.has("ORGANIZATIONRESOURCE_ID") || jsonObj.isNull("ORGANIZATIONRESOURCE_ID"))
+					return new ResponseEntity(getAPIResponse(null, null, "ORGANIZATIONRESOURCE_ID is missing", apiRequest, false).getREQUEST_OUTPUT(), HttpStatus.BAD_REQUEST);
 				
-				if (!jsonObj.has("code") || jsonObj.isNull("code"))
-					return new ResponseEntity(getAPIResponse(null, null, "Code is missing", apiRequest, false).getREQUEST_OUTPUT(), HttpStatus.BAD_REQUEST);
 				
-				if (!jsonObj.has("description") || jsonObj.isNull("description"))
-					return new ResponseEntity(getAPIResponse(null, null, "Description is missing", apiRequest, false).getREQUEST_OUTPUT(), HttpStatus.BAD_REQUEST);
+				if (!jsonObj.has("RESOURCETYPE_ID") || jsonObj.isNull("RESOURCETYPE_ID"))
+					return new ResponseEntity(getAPIResponse(null, null, "RESOURCETYPE_ID is missing", apiRequest, false).getREQUEST_OUTPUT(), HttpStatus.BAD_REQUEST);
+				
+				if (!jsonObj.has("ORGANIZATIONRESOURCE_DESCRIPTION") || jsonObj.isNull("ORGANIZATIONRESOURCE_DESCRIPTION"))
+					return new ResponseEntity(getAPIResponse(null, null, "ORGANIZATIONRESOURCE_DESCRIPTION is missing", apiRequest, false).getREQUEST_OUTPUT(), HttpStatus.BAD_REQUEST);
 			}
 			
-			if (jsonObj.has("entityname") && !jsonObj.isNull("entityname"))
-				organizationresource.setENTITYNAME(jsonObj.getString("entityname"));
+			if (jsonObj.has("ORGANIZATIONRESOURCE_ID") && !jsonObj.isNull("ORGANIZATIONRESOURCE_ID"))
+				organizationresource.setORGANIZATIONRESOURCE_ID(jsonObj.getLong("ORGANIZATIONRESOURCE_ID"));
 			
-			if (jsonObj.has("code") && !jsonObj.isNull("code"))
-				organizationresource.setCODE(jsonObj.getString("code"));
+			if (jsonObj.has("ORGANIZATION_ID") && !jsonObj.isNull("ORGANIZATION_ID"))
+				organizationresource.setORGANIZATION_ID(jsonObj.getLong("ORGANIZATION_ID"));
 			
-			if (jsonObj.has("description") && !jsonObj.isNull("description"))
-				organizationresource.setDESCRIPTION(jsonObj.getString("description"));
+			if (jsonObj.has("RESOURCETYPE_ID") && !jsonObj.isNull("RESOURCETYPE_ID"))
+				organizationresource.setRESOURCETYPE_ID(jsonObj.getLong("RESOURCETYPE_ID"));
 
-			if (jsonObj.has("entity_STATUS") && !jsonObj.isNull("entity_STATUS")) 
-				organizationresource.setENTITY_STATUS(jsonObj.getString("entity_STATUS").toUpperCase());
+			if (jsonObj.has("ORGANIZATIONRESOURCE_DESCRIPTION") && !jsonObj.isNull("ORGANIZATIONRESOURCE_DESCRIPTION")) 
+				organizationresource.setORGANIZATIONRESOURCE_DESCRIPTION(jsonObj.getString("ORGANIZATIONRESOURCE_DESCRIPTION"));
+			
+			if (jsonObj.has("MAXIMUM_NODES") && !jsonObj.isNull("MAXIMUM_NODES")) 
+				organizationresource.setMAXIMUM_NODES(jsonObj.getLong("MAXIMUM_NODES"));
+			
+			if (jsonObj.has("WEBSITE") && !jsonObj.isNull("WEBSITE")) 
+				organizationresource.setWEBSITE(jsonObj.getString("WEBSITE"));
+			
+			if (jsonObj.has("VISIBILITY_ID") && !jsonObj.isNull("VISIBILITY_ID")) 
+				organizationresource.setVISIBILITY_ID(jsonObj.getLong("VISIBILITY_ID"));
+			
+			if (jsonObj.has("RESOURCEBEHAVIOURTYPE_ID") && !jsonObj.isNull("RESOURCEBEHAVIOURTYPE_ID")) 
+				organizationresource.setRESOURCEBEHAVIOURTYPE_ID(jsonObj.getLong("RESOURCEBEHAVIOURTYPE_ID"));
+			
+			if (jsonObj.has("USEGLOBALSECURITYGROUP") && !jsonObj.isNull("USEGLOBALSECURITYGROUP")) 
+				organizationresource.setUSEGLOBALSECURITYGROUP(jsonObj.getString("USEGLOBALSECURITYGROUP"));
+			
+			if (jsonObj.has("CHECKRUNWAYINSTANCES") && !jsonObj.isNull("CHECKRUNWAYINSTANCES")) 
+				organizationresource.setCHECKRUNWAYINSTANCES(jsonObj.getString("CHECKRUNWAYINSTANCES"));
+			
+			if (jsonObj.has("ACCESSINTERNET") && !jsonObj.isNull("ACCESSINTERNET")) 
+				organizationresource.setACCESSINTERNET(jsonObj.getString("ACCESSINTERNET"));
+			
+			if (jsonObj.has("USEPROXY") && !jsonObj.isNull("USEPROXY")) 
+				organizationresource.setUSEPROXY(jsonObj.getString("USEPROXY"));
+			
+			if (jsonObj.has("PROXY_HOSTNAME") && !jsonObj.isNull("PROXY_HOSTNAME")) 
+				organizationresource.setPROXY_HOSTNAME(jsonObj.getString("PROXY_HOSTNAME"));
+			
+			if (jsonObj.has("PROXY_USERNAME") && !jsonObj.isNull("PROXY_USERNAME")) 
+				organizationresource.setPROXY_USERNAME(jsonObj.getString("PROXY_USERNAME"));
+			
+			if (jsonObj.has("PROXY_PASSWORD") && !jsonObj.isNull("PROXY_PASSWORD")) 
+				organizationresource.setPROXY_PASSWORD(jsonObj.getString("PROXY_PASSWORD"));
+			
+			if (jsonObj.has("PROXY_PRIVATEKEY") && !jsonObj.isNull("PROXY_PRIVATEKEY")) 
+				organizationresource.setPROXY_PRIVATEKEY(jsonObj.getString("PROXY_PRIVATEKEY"));
+			
+			if (jsonObj.has("PROXY_PUBLICEKEY") && !jsonObj.isNull("PROXY_PUBLICEKEY")) 
+				organizationresource.setPROXY_PUBLICEKEY(jsonObj.getString("PROXY_PUBLICEKEY"));
 			
 			if (jsonObj.has("isactive"))
-				organizationresource.setISACTIVE(jsonObj.getString("isactive"));
-			else if (id == 0)
-				organizationresource.setISACTIVE("Y");
+			organizationresource.setISACTIVE(jsonObj.getString("isactive"));
+		    else if (id == 0)
+			organizationresource.setISACTIVE("Y");
 
 			organizationresource.setMODIFIED_BY(apiRequest.getREQUEST_ID());
 			organizationresource.setMODIFIED_WORKSTATION(apiRequest.getLOG_WORKSTATION());
 			organizationresource.setMODIFIED_WHEN(dateFormat1.format(date));
 			organizationresources.add(organizationresource);
 		}
+	
 		
 		for (int a=0; a<organizationresources.size(); a++) {
 			OrganizationResource organizationresource = organizationresources.get(a);
 			organizationresource = organizationresourcerepository.saveAndFlush(organizationresource);
-			organizationresources.get(a).setID(organizationresource.getID());
+			organizationresources.get(a).setORGANIZATIONRESOURCE_ID(organizationresource.getORGANIZATIONRESOURCE_ID());
 		}
 		
 		ResponseEntity responseentity;
@@ -310,38 +334,7 @@ public class organizationresourceController{
 		return new ResponseEntity(getAPIResponse(organizationresource, null, null, apiRequest, false).getREQUEST_OUTPUT(), HttpStatus.OK);
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@RequestMapping(value="/entitylist",method=RequestMethod.GET)
-	public ResponseEntity findEntityList(@RequestHeader(value = "Authorization") String headToken) throws JsonProcessingException, JSONException, ParseException {
-		List<Object> Organizationresources =  organizationresourcerepository.findEntityList();
-		return new ResponseEntity(OrganizationResource.toString(), HttpStatus.OK);
-	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@RequestMapping(value="/entity",method=RequestMethod.POST)
-	public ResponseEntity findActiveByEntityName(@RequestBody String data, @RequestHeader(value = "Authorization") String headToken) throws JsonProcessingException, JSONException, ParseException {
-		APIRequestDataLog apiRequest = checkToken("POST", "/organizationresource/entity", data, null, headToken);
-		if (apiRequest.getREQUEST_STATUS() != null) return new ResponseEntity(apiRequest.getREQUEST_OUTPUT(), HttpStatus.BAD_REQUEST);
 
-		JSONObject jsonObj = new JSONObject(data);
-		String entity=(String) jsonObj.get("entityname");
-		List<OrganizationResource> organizationresources =  organizationresourcerepository.findActiveByEntityName(entity);
-		
-		return new ResponseEntity(getAPIResponse(organizationresources, null, null, apiRequest, false).getREQUEST_OUTPUT(), HttpStatus.OK);
-	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@RequestMapping(value="/entity/all",method=RequestMethod.POST)
-	public ResponseEntity findAllByEntityName(@RequestBody String data, @RequestHeader(value = "Authorization") String headToken) throws JsonProcessingException, JSONException, ParseException {
-		APIRequestDataLog apiRequest = checkToken("POST", "/organizationresource/entity/all", data, null, headToken);
-		if (apiRequest.getREQUEST_STATUS() != null) return new ResponseEntity(apiRequest.getREQUEST_OUTPUT(), HttpStatus.BAD_REQUEST);
-
-		JSONObject jsonObj = new JSONObject(data);
-		String entity=(String) jsonObj.get("entityname");
-		List<OrganizationResource> organizationresource =  organizationresourcerepository.findAllByEntityName(entity);
-		
-		return new ResponseEntity(getAPIResponse(organizationresource, null, null, apiRequest, false).getREQUEST_OUTPUT(), HttpStatus.OK);
-	}
 
 	public APIRequestDataLog checkToken(String requestType, String requestURI, String requestBody, String workstation, String accessToken) throws JsonProcessingException {
 		JSONObject checkTokenResponse = AccessToken.checkToken(accessToken);
@@ -375,7 +368,7 @@ public class organizationresourceController{
 		} else {
 			if (organizationresource != null) {
 				apiRequest.setREQUEST_OUTPUT(mapper.writeValueAsString(organizationresource));
-				organizationresourceID = organizationresource.getID();
+				organizationresourceID = organizationresource.getORGANIZATIONRESOURCE_ID();
 			} else {
 				apiRequest.setREQUEST_OUTPUT(mapper.writeValueAsString(organizationresource));
 			}
@@ -384,7 +377,7 @@ public class organizationresourceController{
 		}
 		
 		if (isTableLog)
-			tbldatalogrepository.saveAndFlush(tableDataLogs.TableSaveDataLog(organizationresource_ID, apiRequest.getDATABASETABLE_ID(), apiRequest.getREQUEST_ID(), apiRequest.getREQUEST_OUTPUT()));
+			tbldatalogrepository.saveAndFlush(tableDataLogs.TableSaveDataLog(organizationresourceID, apiRequest.getDATABASETABLE_ID(), apiRequest.getREQUEST_ID(), apiRequest.getREQUEST_OUTPUT()));
 		
 		log.info("Output: " + apiRequest.getREQUEST_OUTPUT());
 		log.info("--------------------------------------------------------");

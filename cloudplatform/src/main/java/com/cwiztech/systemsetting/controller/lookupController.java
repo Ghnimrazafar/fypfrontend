@@ -20,7 +20,6 @@ import org.json.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.cwiztech.cloudplatform.controller.organizationresourceController;
 import com.cwiztech.datalogs.model.APIRequestDataLog;
 import com.cwiztech.datalogs.model.DatabaseTables;
 import com.cwiztech.datalogs.model.tableDataLogs;
@@ -38,7 +37,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RequestMapping("/lookup")
 public class lookupController{
 	
-	private static final Logger log = LoggerFactory.getLogger(organizationresourceController.class);
+	private static final Logger log = LoggerFactory.getLogger(lookupController.class);
 	
 	@Autowired
 	private lookupRepository lookuprepository;

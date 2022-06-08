@@ -1,0 +1,45 @@
+{
+  "groups": [{
+    "name": "file_path",
+    "type": "com.cwiztech.common.OwnerProperties",
+    "sourceType": "com.cwiztech.common.OwnerProperties"
+  }],
+  "properties": [
+    {
+      "name": "file_path.application-path",
+      "type": "java.lang.String",
+      "sourceType": "com.cwiztech.common.OwnerProperties"
+    },
+    {
+      "name": "file_path.employee",
+      "type": "java.lang.String",
+      "sourceType": "com.cwiztech.common.OwnerProperties"
+    },
+    {
+      "name": "file_path.find-address-u-k-a-p-i-key",
+      "type": "java.lang.String",
+      "sourceType": "com.cwiztech.common.OwnerProperties"
+    },
+    {
+      "name": "file_path.find-address-u-k-a-p-i-path",
+      "type": "java.lang.String",
+      "sourceType": "com.cwiztech.common.OwnerProperties"
+    },
+    {
+      "name": "file_path.find-detail-address-u-k-a-p-i-path",
+      "type": "java.lang.String",
+      "sourceType": "com.cwiztech.common.OwnerProperties"
+    },
+    {
+      "name": "file_path.library",
+      "type": "java.lang.String",
+      "sourceType": "com.cwiztech.common.OwnerProperties"
+    },
+    {
+      "name": "file_path.student",
+      "type": "java.lang.String",
+      "sourceType": "com.cwiztech.common.OwnerProperties"
+    }
+  ],
+  "hints": []
+}
